@@ -1,0 +1,9 @@
+query GetMyRecipes {
+  recipes {
+    id
+    title
+    description
+    ingredients
+    instructions
+  }
+}
