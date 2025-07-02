@@ -38,6 +38,10 @@
   </div>
 </template>
 
+
+
+
+
 <script setup>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
@@ -46,6 +50,9 @@ const schema = yup.object({
   email: yup.string().required().email("Must be a valid email"),
   password: yup.string().required(),
 });
+
+const router = useRouter();
+const authToken = useCookie("auth-token");
 
 async function handleSubmit(values) {
   console.log("Login form submitted with:", values);
@@ -63,9 +70,18 @@ async function handleSubmit(values) {
       console.error("Error submitting login form:", error.value);
       alert("Login failed. Please check your credentials.");
     } else {
-      console.log("Server response:", data.value);
-      alert("Login successful! Check the Go server console.");
-      // We will add JWT handling here next
+      if (data.value && data.value.token) {
+        authToken.value = data.value.token;
+        alert("Login successful!");
+        await router.push("/");
+      } else {
+        console.error("Login response did not include a token:", data.value);
+        alert(
+          `Login failed: ${
+            data.value?.message || "Invalid credentials or server error."
+          }`
+        );
+      }
     }
   } catch (e) {
     console.error("An unexpected error occurred:", e);
