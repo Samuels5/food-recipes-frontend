@@ -29,16 +29,28 @@
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div
-        v-for="recipe in data.recipes"
-        :key="recipe.id"
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+      <div 
+        v-for="recipe in data.recipes" 
+        :key="recipe.id" 
+        class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
       >
-        <h3 class="text-xl font-semibold mb-2">{{ recipe.title }}</h3>
-        <p class="text-gray-600 mb-4">{{ recipe.description }}</p>
-        <div class="space-y-2">
-          <button class="text-blue-500 hover:text-blue-700 mr-4">Edit</button>
-          <button class="text-red-500 hover:text-red-700">Delete</button>
+        <img 
+          :src="recipe.image_url" 
+          :alt="recipe.title"
+          class="w-full h-48 object-cover"
+          @error="$event.target.src = 'https://via.placeholder.com/400x300?text=Recipe+Image'"
+        />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2">{{ recipe.title }}</h3>
+          <p class="text-gray-600 mb-4 line-clamp-2">{{ recipe.description }}</p>
+          <div class="flex gap-2">
+            <button class="text-blue-500 hover:text-blue-700 px-3 py-1 rounded border border-blue-500 hover:bg-blue-50">
+              Edit
+            </button>
+            <button class="text-red-500 hover:text-red-700 px-3 py-1 rounded border border-red-500 hover:bg-red-50">
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

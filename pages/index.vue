@@ -11,10 +11,20 @@
         :key="recipe.id"
         class="border p-4 rounded"
       >
-        <img :src="recipe.image_url" alt="Recipe image" class="mb-2" />
+        <img
+          :src="recipe.image_url"
+          alt="Recipe image"
+          class="mb-2 w-full h-48 object-cover rounded"
+          @error="
+            $event.target.src =
+              'https://via.placeholder.com/400x300?text=Recipe+Image'
+          "
+        />
         <h2 class="text-xl font-bold">{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
-        <p class="text-sm text-gray-500">By: {{ recipe.user.username }}</p>
+        <p class="text-sm text-gray-500">
+          By: {{ recipe.user?.username || "Anonymous" }}
+        </p>
       </div>
     </div>
   </div>
