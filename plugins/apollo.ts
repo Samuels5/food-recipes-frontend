@@ -14,13 +14,14 @@ export default defineNuxtPlugin(() => {
     // Get the authentication token from cookie
     const token = useCookie("auth-token").value;
 
-    // Return the headers to the context so httpLink can read them
+    // For public queries (like home page), use admin secret
+    // For authenticated queries, use JWT token
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${token}` : "",
-        // Fallback to admin secret if no token (for public queries)
-        "x-hasura-admin-secret": !token ? "myadminsecretkey" : undefined,
+        ...(token
+          ? { authorization: `Bearer ${token}` }
+          : { "x-hasura-admin-secret": "myadminsecretkey" }),
       },
     };
   });
