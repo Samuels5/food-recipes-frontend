@@ -6,5 +6,6 @@ mutation CreateRecipe($object: recipes_insert_input!) {
     ingredients
     instructions
     image_url
+    user_id
   }
 }

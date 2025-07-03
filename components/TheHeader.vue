@@ -15,21 +15,20 @@
         <NuxtLink to="/register" class="hover:text-gray-300">Register</NuxtLink>
       </template>
       <template v-else>
-        <button @click="logout" class="hover:text-gray-300">Logout</button>
+        <button @click="handleLogout" class="hover:text-gray-300">
+          Logout
+        </button>
       </template>
     </nav>
   </header>
 </template>
 
 <script setup>
-import { useCookie, useRouter } from "#app";
-
-const authToken = useCookie("auth-token");
-const isAuthenticated = computed(() => !!authToken.value);
+const { isAuthenticated, logout } = useAuth();
 const router = useRouter();
 
-const logout = () => {
-  authToken.value = null; // Clear the cookie
+const handleLogout = () => {
+  logout();
   router.push("/");
 };
 </script>

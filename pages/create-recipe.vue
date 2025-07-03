@@ -126,17 +126,25 @@ const schema = yup.object({
 
 const router = useRouter();
 const { mutate: createRecipe } = useMutation(CreateRecipeMutation);
+const { getUserId } = useAuth();
 
 async function handleSubmit(values) {
   try {
     console.log("Submitting recipe:", values);
 
-    // Provide a default image URL if none is provided
+    const userId = getUserId();
+    if (!userId) {
+      alert("You must be logged in to create a recipe.");
+      return;
+    }
+
+    // Provide a default image URL if none is provided and include user_id
     const recipeData = {
       ...values,
       image_url:
         values.image_url ||
         "https://via.placeholder.com/400x300?text=Recipe+Image",
+      user_id: userId,
     };
 
     const result = await createRecipe({
