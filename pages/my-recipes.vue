@@ -29,25 +29,34 @@
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div 
-        v-for="recipe in data.recipes" 
-        :key="recipe.id" 
+      <div
+        v-for="recipe in data.recipes"
+        :key="recipe.id"
         class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
       >
-        <img 
-          :src="recipe.image_url" 
+        <img
+          :src="recipe.image_url"
           :alt="recipe.title"
           class="w-full h-48 object-cover"
-          @error="$event.target.src = 'https://via.placeholder.com/400x300?text=Recipe+Image'"
+          @error="
+            $event.target.src =
+              'https://via.placeholder.com/400x300?text=Recipe+Image'
+          "
         />
         <div class="p-6">
           <h3 class="text-xl font-semibold mb-2">{{ recipe.title }}</h3>
-          <p class="text-gray-600 mb-4 line-clamp-2">{{ recipe.description }}</p>
+          <p class="text-gray-600 mb-4 line-clamp-2">
+            {{ recipe.description }}
+          </p>
           <div class="flex gap-2">
-            <button class="text-blue-500 hover:text-blue-700 px-3 py-1 rounded border border-blue-500 hover:bg-blue-50">
+            <button
+              class="text-blue-500 hover:text-blue-700 px-3 py-1 rounded border border-blue-500 hover:bg-blue-50"
+            >
               Edit
             </button>
-            <button class="text-red-500 hover:text-red-700 px-3 py-1 rounded border border-red-500 hover:bg-red-50">
+            <button
+              class="text-red-500 hover:text-red-700 px-3 py-1 rounded border border-red-500 hover:bg-red-50"
+            >
               Delete
             </button>
           </div>
@@ -65,5 +74,21 @@ definePageMeta({
   middleware: "auth",
 });
 
-const { result: data, loading: pending, error } = useQuery(GetMyRecipesQuery);
+const { getUserId } = useAuth();
+
+const userId = getUserId();
+if (!userId) {
+  throw createError({
+    statusCode: 401,
+    statusMessage: "User not authenticated",
+  });
+}
+
+const {
+  result: data,
+  loading: pending,
+  error,
+} = useQuery(GetMyRecipesQuery, {
+  userId: userId,
+});
 </script>
